@@ -13,36 +13,13 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     shell:SystemTray.IsVisible="True">
 
-    <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <!-- LOCALIZATION NOTE:
-            To localize the displayed strings copy their values to appropriately named
-            keys in the app's neutral language resource file (AppResources.resx) then
-            replace the hard-coded text value between the attributes' quotation marks
-            with the binding clause whose path points to that string name.
-
-            For example:
-
-                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
-
-            This binding points to the template's string resource named "ApplicationTitle".
-
-            Adding supported languages in the Project Properties tab will create a
-            new resx file per language that can carry the translated values of your
-            UI strings. The binding in these examples will cause the value of the
-            attributes to be drawn from the .resx file that matches the
-            CurrentUICulture of the app at run time.
-         -->
-
-        <!--TitlePanel contains the name of the application and page title-->
-
-        <!--Pivot Control-->
         <phone:Pivot Name="pvtPages" Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
        
             <phone:PivotItem Header="Special Chars" Name="tabSpecial">
                 <StackPanel>
                     <TextBox Name="txtInput_Special" HorizontalAlignment="Left" Height="72" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
-                    <Button Name="btnGenerate_Special" Content="Generate!" Height="125" />
+                    <Button Name="btnGenerate_Special" Content="Generate!" Height="125" Click="btnGenerate_Special_Click"/>
                     <TextBox Name="txtOutput_Special" IsEnabled="False" Text="" />
                     <Button Name="btnGenerate_Special_8" Content="Copy 8 characters"  IsEnabled="False"/>
                     <Button Name="btnGenerate_Special_12" Content="Copy 12 characters"  IsEnabled="False"/>
@@ -65,19 +42,22 @@
             
             <phone:PivotItem Header="Master Key" Name="tabKey">
                 <StackPanel>
-                    <TextBlock TextWrapping="Wrap">
-                        The Master Key is used to keep passwords that you generate different from passwords that others generate.
-                        <LineBreak/><LineBreak/>
-                        If you have multiple devices, you should make sure that this Master Key is the same in both location.
-                        <LineBreak/><LineBreak/>
-                        The Master Key can be any length, but generally the more characters, the better.
-                        <LineBreak/><LineBreak/>
-                        If left empty, a random key will be generated.
-                        <LineBreak/><LineBreak/>
-                        For security reasons, viewing the current key is not possible - you can only set the key from here.
+                    <TextBlock TextWrapping="Wrap">The Master Key is used to keep passwords that you generate different from passwords that others generate.
+                        <LineBreak/><LineBreak/>If you have multiple devices, you should make sure that this Master Key is the same in both location.
+                        <LineBreak/><LineBreak/>The Master Key can be any length, but generally the more characters, the better.
+                        <LineBreak/><LineBreak/>If left empty, a random key will be generated.
+                        <LineBreak/><LineBreak/>For security reasons, viewing the current key is not possible - you can only set the key from here.
                     </TextBlock>
                     <TextBox Height="72" TextWrapping="Wrap" Text=""/>                    
                     <Button Content="Set Master Key"/>                    
+                </StackPanel>
+            </phone:PivotItem>
+            <phone:PivotItem Header="Data" Name="tabClean">
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap">
+                        The only data that this application stores on this device is the encrypted "Master Key", which is used as a starting point to generate passwords (also known as "salt"). <LineBreak/><LineBreak/>The button below allows you to delete the stored master key from this device. This will prevent you from generating new passwords until a new key is set, but will ensure that your master key cannot be copied from this device.
+                    </TextBlock>
+                    <Button Name="btnEraseKey" Content="Erase Master Key"/>
                 </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>

@@ -10,125 +10,71 @@ namespace MSPwdGen_WinPhone8
 {
     public class MSPWDStorage
     {
+        /*
+         * Notes to self regarding storage of the master key
+         *  - Store the raw bytes of the master key, rather than converting it to a string, because that screws things up
+         *  - Hash whatever the user puts in as a master key with SHA256 (since it returns bytes anyways). 
+         *  - We won't be able to display what the user entered as a master key (here, or in the windows version), because it will be a hash. This is OK.
+         *  - In windows version, prevent the display of the master key like we do here. You can only overwrite the key with a new one, or a random one.
+         * 
+         */
+
         const string KeyFileName = "MarkPasswordGen.blob";
 
         /// <summary>
         /// Sets the master key
         /// </summary>
-        /// <param name="input"></param>
-        public static void SetMasterKey(string input)
+        public static void SetMasterKey(byte[] input)
         {
-            using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null))
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                using (IsolatedStorageFileStream oStream = new IsolatedStorageFileStream(KeyFileName, FileMode.Create, isoStore))
+                using (IsolatedStorageFileStream file = store.OpenFile(KeyFileName, FileMode.OpenOrCreate))
                 {
-                    using (StreamWriter writer = new StreamWriter(oStream))
-                    {
-                        if ((input.Length > 0))
-                        {
-                            string sharedSecret = MSPWDCrypto.ConvertByteArrayToString(MSPWDCrypto.HashThis(System.Environment.MachineName.ToString()));
-                            writer.Write(MSPWDCrypto.Encrypt(input, sharedSecret));
-                        }
-                        else
-                        {
-                            writer.Write(MSPWDCrypto.ConvertByteArrayToString(MSPWDCrypto.HashThis(DateTime.Now.ToString())));
-                        }
-                        writer.Close();
-                    }
+                    file.Write(input, 0, input.Length);                    
                 }
             }
         }
-
-        /// <summary>
-        /// Checks if the master key exists
-        /// </summary>
-        /// <returns></returns>
-        public static bool MasterKeyExists()
+       
+        public static void DeleteMasterKey()
         {
-            bool returnMe = false;
-            using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null))
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                string[] fileNames = isoStore.GetFileNames(KeyFileName);
-                
-                foreach (string file in fileNames)
+                if (store.FileExists(KeyFileName))
                 {
-                    if (file == KeyFileName)
-                    {
-                        returnMe = true;
-                    }
-                }
+                    store.DeleteFile(KeyFileName);
+                }                
             }
-            return returnMe;
         }
 
         /// <summary>
         /// Retreives the master key from isolated storage
         /// </summary>
         /// <returns></returns>
-        public static string GetMasterKey()
+        public static byte[] GetMasterKey()
         {
-            string returnMe = "";
-            using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null))
+            byte[] MasterKey = new byte[0];
+
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                string[] fileNames = isoStore.GetFileNames(KeyFileName);
-
-                Boolean foundFile = false;
-
-                foreach (string file in fileNames)
+                if (store.FileExists(KeyFileName))
                 {
-                    if (file == KeyFileName)
+                    // Load the file
+                    using (IsolatedStorageFileStream file = store.OpenFile(KeyFileName, FileMode.Open))
                     {
-                        foundFile = true;
-                        //The file exists
+                        MasterKey = new byte[file.Length];
+                        file.Read(MasterKey, 0, Convert.ToInt32(file.Length));
                     }
-                }
-
-                if (foundFile == false)
-                {
-                    GenerateNewKeyFile();
-                    return GetMasterKey();
                 }
                 else
                 {
-                    using (IsolatedStorageFileStream iStream = new IsolatedStorageFileStream(KeyFileName, System.IO.FileMode.Open, isoStore))
-                    {
-                        StreamReader reader = new StreamReader(iStream);
-                        String line;
-                        while ((line = reader.ReadLine()) != null)
-                        {
-                            returnMe = line;
-                        }
-                    }
-
+                    // Generate new master key, and save it to a file
+                    // The method we generate this does not have to match other platforms, it just has to be random
+                    MasterKey = MSPWDCrypto.CreateMasterKey(DateTime.Now.ToString("Fo"));
+                    SetMasterKey(MasterKey);
                 }
             }
-
-            string sharedSecret = MSPWDCrypto.ConvertByteArrayToString(MSPWDCrypto.HashThis(System.Environment.MachineName.ToString()));
-            return MSPWDCrypto.Decrypt(returnMe, sharedSecret);
-            //return returnMe;
-        }
-
-        /// <summary>
-        /// Generates a new salt file, if one doesn't already exist
-        /// </summary>
-        public static void GenerateNewKeyFile()
-        {
-            using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null))
-            {
-                using (IsolatedStorageFileStream oStream = new IsolatedStorageFileStream(KeyFileName, FileMode.Create, isoStore))
-                {
-                    using (StreamWriter writer = new StreamWriter(oStream))
-                    {
-                        string timeString = DateTime.Now.ToString();
-                        string newSalt = MSPWDCrypto.ConvertByteArrayToString(MSPWDCrypto.HashThis(timeString));
-                        string sharedSecret = MSPWDCrypto.ConvertByteArrayToString(MSPWDCrypto.HashThis(System.Environment.MachineName.ToString()));
-                        writer.Write(MSPWDCrypto.Encrypt(newSalt, sharedSecret));
-                        writer.Close();
-                    }
-                }
-            }
-
-
+            
+            return MasterKey;
         }
     }
 }

@@ -18,15 +18,27 @@ namespace MSPwdGen_WinPhone8
             InitializeComponent();
 
             // If this is the first run of the app, show the master key page
-            if (MSPWDStorage.MasterKeyExists())
-            {
-            }
-
             pvtPages.SelectedItem = tabKey;
-
+            
+            //try
+            {
+                
+            }/*
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            //*/
             // Load the key, or generate a new one
 
         }
+
+        private void btnGenerate_Special_Click(object sender, RoutedEventArgs e)
+        {
+            txtOutput_Special.Text = ":" + MSPWDStorage.GetMasterKey();
+        }
+
+
 
     }
 }

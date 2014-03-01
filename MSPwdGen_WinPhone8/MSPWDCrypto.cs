@@ -10,51 +10,47 @@ namespace MSPwdGen_WinPhone8
 {
     public static class MSPWDCrypto
     {
-        public static string CreatePassword_Alpha(string input, string salt)
+        private const string ProtectionEntropyString = "Mark's Password Generator";
+
+        public static string CreatePassword_Alpha(string input)
         {
+            // Set up the characters that we will use to generate the password. 
+            // It is important that these remain identical on all platforms, so that passwords are consistent
             char[] characterArray_Alpha = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
                                             'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
                                             'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
                                             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
 
-            return GenPasswordWithThisHash(characterArray_Alpha, HashThis_SHA512(input + salt));
+            // Convert the given string to a byte array so we can work with it
+            byte[] inputBytes = Encoding.Unicode.GetBytes(input);
+
+            // Retreive the user's master key
+            byte[] MasterKey = MSPWDStorage.GetMasterKey();
+
+            return GenPasswordWithThisHash(characterArray_Alpha, SHA256(CombineByteArrays(inputBytes, MasterKey)));
         }
 
-        public static string CreatePassword_Special(string input, string salt)
+        public static string CreatePassword_Special(string input)
         {
+            // Set up the characters that we will use to generate the password. 
+            // It is important that these remain identical on all platforms, so that passwords are consistent
             char[] characterArray_Special = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
                                             'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
                                             'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
                                             'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#',
                                             '$','%','^','*','(',')','_','+','?'};
 
-            return GenPasswordWithThisHash(characterArray_Special, HashThis_SHA512(input + salt));
+            // Convert the given string to a byte array so we can work with it
+            byte[] inputBytes = Encoding.Unicode.GetBytes(input);
+
+            // Retreive the user's master key
+            byte[] MasterKey = MSPWDStorage.GetMasterKey();
+
+            return GenPasswordWithThisHash(characterArray_Special, SHA256(CombineByteArrays(inputBytes, MasterKey)));
         }
 
-        public static string Encrypt(string plainText, string sharedSecret)
-        {
-            byte[] clearBytes = System.Text.Encoding.Unicode.GetBytes(plainText);
-            PasswordDeriveBytes pdb = new PasswordDeriveBytes(sharedSecret,
-                new byte[] {0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 
-            0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76});
-
-            byte[] encryptedData = Encrypt(clearBytes,
-                     pdb.GetBytes(32), pdb.GetBytes(16));
-
-            return Convert.ToBase64String(encryptedData);
-        }
-
-        public static string Decrypt(string cipherText, string sharedSecret)
-        {
-            byte[] cipherBytes = Convert.FromBase64String(cipherText);
-            PasswordDeriveBytes pdb = new PasswordDeriveBytes(sharedSecret, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
-
-            byte[] decryptedData = Decrypt(cipherBytes, pdb.GetBytes(32), pdb.GetBytes(16));
-
-            return System.Text.Encoding.Unicode.GetString(decryptedData);
-        }
-
-        public static string ConvertByteArrayToString(byte[] convertThis)
+        /*
+        private static string ConvertByteArrayToString(byte[] convertThis)
         {
             string returnMe = String.Empty;
 
@@ -64,12 +60,27 @@ namespace MSPwdGen_WinPhone8
             }
             return returnMe;
         }
+        */
 
-        public static byte[] HashThis(string hashThis)
+        public static byte[] CreateMasterKey(string input)
         {
-            return HashThis_SHA512(hashThis);
+            byte[] inputByes = Encoding.Unicode.GetBytes(input);
+
+            // This salt needs to be the same on each platform, so it can't be as random as I had hoped.
+            byte[] salt = Encoding.Unicode.GetBytes(@"AG/Fh&QC;7wY0>CPd;gM0*3JBTl0>*pN>DBb-^*sb_+Oa+toLIZS}'/1ne^6Y@6");
+
+            return SHA256(CombineByteArrays(inputByes, salt));
         }
 
+        public static string VisualizeByteArray(byte[] input)
+        {
+            char[] characterArray_Alpha = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
+                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
+                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+
+            return GenPasswordWithThisHash(characterArray_Alpha, input);
+        }
 
         private static string GenPasswordWithThisHash(char[] characterSet, byte[] input)
         {
@@ -86,62 +97,44 @@ namespace MSPwdGen_WinPhone8
             return returnMe;
         }
 
-        private static byte[] HashThis_SHA512(string hashThis)
+        private static byte[] CombineByteArrays(byte[] first, byte[] second)
         {
-            byte[] hashValue;
-            byte[] message = Encoding.ASCII.GetBytes(hashThis);
-
-            SHA512Managed hashString = new SHA512Managed();
-            hashValue = hashString.ComputeHash(message);
-
-            return hashValue;
+            byte[] ret = new byte[first.Length + second.Length];
+            Buffer.BlockCopy(first, 0, ret, 0, first.Length);
+            Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
+            return ret;
         }
 
-        private static byte[] HashThis_SHA256(string hashThis)
+        private static byte[] SHA256(byte[] hashThis)
+        {            
+            SHA256Managed sha256 = new SHA256Managed();
+            return sha256.ComputeHash(hashThis);
+        }
+
+        public static byte[] Encrypt(byte[] plaintext)
+        {            
+            // This is used by the windows phone "Protection" API to differentiate between data protected by different programs. 
+            // The protection API is supposed to handle dealing with a unique encryption key, so this doesn't have to be 
+            // cryptographically strong, it merely has to seperate data between different programs.
+            byte[] ProtectionEntropy = Encoding.UTF8.GetBytes(ProtectionEntropyString);
+            
+            // Encrypt the byte array
+            byte[] EncryptedBytes = ProtectedData.Protect(plaintext, ProtectionEntropy);
+
+            return EncryptedBytes;
+        }
+
+        public static byte[] Decrypt(byte[] cyphertext)
         {
-            UnicodeEncoding UE = new UnicodeEncoding();
+            // This is used by the windows phone "Protection" API to differentiate between data protected by different programs. 
+            // The protection API is supposed to handle dealing with a unique encryption key, so this doesn't have to be 
+            // cryptographically strong, it merely has to seperate data between different programs.
+            byte[] ProtectionEntropy = Encoding.UTF8.GetBytes(ProtectionEntropyString);
 
-            byte[] hashValue;
-            byte[] message = Encoding.ASCII.GetBytes(hashThis);
-
-            SHA256Managed hashString = new SHA256Managed();
-
-            hashValue = hashString.ComputeHash(message);
-            return hashValue;
+            byte[] DecryptedBytes = ProtectedData.Unprotect(cyphertext, ProtectionEntropy);
+            
+            return DecryptedBytes;
         }
         
-        private static byte[] Encrypt(byte[] clearData, byte[] Key, byte[] IV)
-        {
-            MemoryStream ms = new MemoryStream();
-            Rijndael alg = Rijndael.Create();
-            alg.Padding = PaddingMode.Zeros;
-            alg.Key = Key;
-            alg.IV = IV;
-
-            CryptoStream cs = new CryptoStream(ms, alg.CreateEncryptor(), CryptoStreamMode.Write);
-            cs.Write(clearData, 0, clearData.Length);
-            cs.Close();
-
-            byte[] encryptedData = ms.ToArray();
-            return encryptedData;
-        }
-
-        private static byte[] Decrypt(byte[] cipherData, byte[] Key, byte[] IV)
-        {
-            MemoryStream ms = new MemoryStream();
-
-            Rijndael alg = Rijndael.Create();
-            alg.Padding = PaddingMode.Zeros;
-            alg.Key = Key;
-            alg.IV = IV;
-
-            CryptoStream cs = new CryptoStream(ms,
-                alg.CreateDecryptor(), CryptoStreamMode.Write);
-            cs.Write(cipherData, 0, cipherData.Length);
-            cs.Close();
-            byte[] decryptedData = ms.ToArray();
-            return decryptedData;
-        }
-
     }    
 }
