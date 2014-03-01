@@ -46,6 +46,18 @@ namespace MSPwdGen_WinPhone8
             }
         }
 
+        public static bool MasterKeyFileExists()
+        {
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (store.FileExists(KeyFileName))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Retreives the master key from isolated storage
         /// </summary>

@@ -48,16 +48,16 @@
                         <LineBreak/><LineBreak/>If left empty, a random key will be generated.
                         <LineBreak/><LineBreak/>For security reasons, viewing the current key is not possible - you can only set the key from here.
                     </TextBlock>
-                    <TextBox Height="72" TextWrapping="Wrap" Text=""/>                    
-                    <Button Content="Set Master Key"/>                    
+                    <TextBox Height="72" TextWrapping="Wrap" Text="" Name="txtNewMasterKey"/>                    
+                    <Button Content="Set Master Key" Name="btnSetMasterKey" Click="btnSetMasterKey_Click"/>                    
                 </StackPanel>
             </phone:PivotItem>
             <phone:PivotItem Header="Data" Name="tabClean">
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap">
-                        The only data that this application stores on this device is the encrypted "Master Key", which is used as a starting point to generate passwords (also known as "salt"). <LineBreak/><LineBreak/>The button below allows you to delete the stored master key from this device. This will prevent you from generating new passwords until a new key is set, but will ensure that your master key cannot be copied from this device.
+                        The only data that this application stores on this device is the encrypted "Master Key", which is used as a starting point to generate passwords (also known as "salt"). <LineBreak/><LineBreak/>This key is encrypted, and under normal circumstances it can only be decrypted by this device.<LineBreak/><LineBreak/>The button below allows you to delete the stored master key from this device, causing a new random key to be generated in it's place.<LineBreak/><LineBreak/>Deleting the key file means that the results of passwords you have previously generated will be different, but also ensures that your master key cannot be copied from this device.<LineBreak/>
                     </TextBlock>
-                    <Button Name="btnEraseKey" Content="Erase Master Key"/>
+                    <Button Name="btnEraseKey" Content="Erase Master Key" Click="btnEraseKey_Click"/>
                 </StackPanel>
             </phone:PivotItem>
         </phone:Pivot>
