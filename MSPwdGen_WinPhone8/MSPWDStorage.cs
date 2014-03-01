@@ -10,20 +10,8 @@ namespace MSPwdGen_WinPhone8
 {
     public class MSPWDStorage
     {
-        /*
-         * Notes to self regarding storage of the master key
-         *  - Store the raw bytes of the master key, rather than converting it to a string, because that screws things up
-         *  - Hash whatever the user puts in as a master key with SHA256 (since it returns bytes anyways). 
-         *  - We won't be able to display what the user entered as a master key (here, or in the windows version), because it will be a hash. This is OK.
-         *  - In windows version, prevent the display of the master key like we do here. You can only overwrite the key with a new one, or a random one.
-         * 
-         */
-
         const string KeyFileName = "MarkPasswordGen.blob";
 
-        /// <summary>
-        /// Sets the master key
-        /// </summary>
         public static void SetMasterKey(byte[] input)
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
@@ -59,7 +47,7 @@ namespace MSPwdGen_WinPhone8
         }
 
         /// <summary>
-        /// Retreives the master key from isolated storage
+        /// Retreives the master key from isolated storage. If a key does not exist, it will create a new one.
         /// </summary>
         /// <returns></returns>
         public static byte[] GetMasterKey()
@@ -81,7 +69,7 @@ namespace MSPwdGen_WinPhone8
                 {
                     // Generate new master key, and save it to a file
                     // The method we generate this does not have to match other platforms, it just has to be random
-                    MasterKey = MSPWDCrypto.CreateMasterKey(DateTime.Now.ToString("Fo"));
+                    MasterKey = MSPWDCrypto.CreateMasterKey(MSPWDCrypto.CreateRandomString());
                     SetMasterKey(MasterKey);
                 }
             }

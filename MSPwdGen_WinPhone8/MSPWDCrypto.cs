@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Phone.Info;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,17 +12,23 @@ namespace MSPwdGen_WinPhone8
 {
     public static class MSPWDCrypto
     {
+        // Set up the characters that we will use to generate the passwords. 
+        // It is important that these remain identical on all platforms, so that passwords are consistent
+        private static char[] characterArray_Alpha = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
+                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
+                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        
+        private static char[] characterArray_Special = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
+                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
+                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
+                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#',
+                                            '$','%','^','*','(',')','_','+','?'};
+
         private const string ProtectionEntropyString = "Mark's Password Generator";
 
         public static string CreatePassword_Alpha(string input)
         {
-            // Set up the characters that we will use to generate the password. 
-            // It is important that these remain identical on all platforms, so that passwords are consistent
-            char[] characterArray_Alpha = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
-                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
-                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-
             // Convert the given string to a byte array so we can work with it
             byte[] inputBytes = Encoding.Unicode.GetBytes(input);
 
@@ -32,14 +40,6 @@ namespace MSPwdGen_WinPhone8
 
         public static string CreatePassword_Special(string input)
         {
-            // Set up the characters that we will use to generate the password. 
-            // It is important that these remain identical on all platforms, so that passwords are consistent
-            char[] characterArray_Special = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
-                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
-                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','!','@','#',
-                                            '$','%','^','*','(',')','_','+','?'};
-
             // Convert the given string to a byte array so we can work with it
             byte[] inputBytes = Encoding.Unicode.GetBytes(input);
 
@@ -48,20 +48,7 @@ namespace MSPwdGen_WinPhone8
 
             return GenPasswordWithThisHash(characterArray_Special, SHA256(CombineByteArrays(inputBytes, MasterKey)));
         }
-
-        /*
-        private static string ConvertByteArrayToString(byte[] convertThis)
-        {
-            string returnMe = String.Empty;
-
-            foreach (byte x in convertThis)
-            {
-                returnMe += String.Format("{0:x2}", x);
-            }
-            return returnMe;
-        }
-        */
-
+               
         public static byte[] CreateMasterKey(string input)
         {
             byte[] inputByes = Encoding.Unicode.GetBytes(input);
@@ -74,11 +61,6 @@ namespace MSPwdGen_WinPhone8
 
         public static string VisualizeByteArray(byte[] input)
         {
-            char[] characterArray_Alpha = {'1','2','3','4','5','6','7','8','9','0','a','b','c','d','e','f',
-                                            'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v',
-                                            'w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L',
-                                            'M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-
             return GenPasswordWithThisHash(characterArray_Alpha, input);
         }
 
@@ -134,6 +116,12 @@ namespace MSPwdGen_WinPhone8
             byte[] DecryptedBytes = ProtectedData.Unprotect(cyphertext, ProtectionEntropy);
             
             return DecryptedBytes;
+        }
+
+        public static string CreateRandomString()
+        {
+            Random random = new Random();
+            return GenPasswordWithThisHash(characterArray_Special, SHA256(Encoding.Unicode.GetBytes(DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff",CultureInfo.InvariantCulture) + DeviceStatus.DeviceName + random.Next(0,9999).ToString())));
         }
         
     }    

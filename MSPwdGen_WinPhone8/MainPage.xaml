@@ -11,7 +11,8 @@
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="True"    
+    >
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <phone:Pivot Name="pvtPages" Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}">
@@ -21,41 +22,46 @@
                     <TextBox Name="txtInput_Special" HorizontalAlignment="Left" Height="72" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
                     <Button Name="btnGenerate_Special" Content="Generate!" Height="125" Click="btnGenerate_Special_Click"/>
                     <TextBox Name="txtOutput_Special" IsEnabled="False" Text="" />
-                    <Button Name="btnGenerate_Special_8" Content="Copy 8 characters"  IsEnabled="False"/>
-                    <Button Name="btnGenerate_Special_12" Content="Copy 12 characters"  IsEnabled="False"/>
-                    <Button Name="btnGenerate_Special_15" Content="Copy 15 characters"  IsEnabled="False"/>
-                    <Button Name="btnGenerate_Special_20" Content="Copy 20 characters"  IsEnabled="False"/>
+                    <Button Name="btnGenerate_Special_8" Content="Copy 8 characters"  IsEnabled="False" Click="btnGenerate_Special_8_Click"/>
+                    <Button Name="btnGenerate_Special_12" Content="Copy 12 characters"  IsEnabled="False" Click="btnGenerate_Special_12_Click"/>
+                    <Button Name="btnGenerate_Special_15" Content="Copy 15 characters"  IsEnabled="False" Click="btnGenerate_Special_15_Click"/>
+                    <Button Name="btnGenerate_Special_20" Content="Copy 20 characters"  IsEnabled="False" Click="btnGenerate_Special_20_Click"/>
                 </StackPanel>                
             </phone:PivotItem>
 
             <phone:PivotItem Header="Alpha Only" Name="tabAlpha">
                 <StackPanel>
                     <TextBox Name="txtInput_Alpha" HorizontalAlignment="Left" Height="72" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="456"/>
-                    <Button Name="btnGenerate_Alpha" Content="Generate!" Height="125" />
+                    <Button Name="btnGenerate_Alpha" Content="Generate!" Height="125" Click="btnGenerate_Alpha_Click" />
                     <TextBox Name="txtOutput_Alpha" Text="" IsEnabled="False"/>
-                    <Button Name="btnGenerate_Alpha_8" Content="Copy 8 characters" IsEnabled="False" />
-                    <Button Name="btnGenerate_Alpha_12" Content="Copy 12 characters" IsEnabled="False" />
-                    <Button Name="btnGenerate_Alpha_15" Content="Copy 15 characters" IsEnabled="False" />
-                    <Button Name="btnGenerate_Alpha_20" Content="Copy 20 characters" IsEnabled="False" />
+                    <Button Name="btnGenerate_Alpha_8" Content="Copy 8 characters" IsEnabled="False" Click="btnGenerate_Alpha_8_Click"/>
+                    <Button Name="btnGenerate_Alpha_12" Content="Copy 12 characters" IsEnabled="False" Click="btnGenerate_Alpha_12_Click"/>
+                    <Button Name="btnGenerate_Alpha_15" Content="Copy 15 characters" IsEnabled="False" Click="btnGenerate_Alpha_15_Click"/>
+                    <Button Name="btnGenerate_Alpha_20" Content="Copy 20 characters" IsEnabled="False" Click="btnGenerate_Alpha_20_Click"/>
                 </StackPanel>
             </phone:PivotItem>
             
             <phone:PivotItem Header="Master Key" Name="tabKey">
                 <StackPanel>
-                    <TextBlock TextWrapping="Wrap">The Master Key is used to keep passwords that you generate different from passwords that others generate.
-                        <LineBreak/><LineBreak/>If you have multiple devices, you should make sure that this Master Key is the same in both location.
-                        <LineBreak/><LineBreak/>The Master Key can be any length, but generally the more characters, the better.
-                        <LineBreak/><LineBreak/>If left empty, a random key will be generated.
-                        <LineBreak/><LineBreak/>For security reasons, viewing the current key is not possible - you can only set the key from here.
+                    <TextBlock TextWrapping="Wrap">The Master Key is used to keep your passwords different from the passwords that others generate.
+                        <LineBreak/><LineBreak/>If you have multiple devices, you should make sure that this Master Key is the same in both locations.
+                        <LineBreak/><LineBreak/>The Master Key can be a word or phrase of any length, but generally the more characters, the better. You should set your key to something memorable, that others wouldn't be able to guess.
+                        <LineBreak/><LineBreak/>For security reasons, it is not possible to see what your key is set to - you can only set a new key from here.
+                        <LineBreak/>
                     </TextBlock>
                     <TextBox Height="72" TextWrapping="Wrap" Text="" Name="txtNewMasterKey"/>                    
                     <Button Content="Set Master Key" Name="btnSetMasterKey" Click="btnSetMasterKey_Click"/>                    
                 </StackPanel>
             </phone:PivotItem>
-            <phone:PivotItem Header="Data" Name="tabClean">
+            
+            <phone:PivotItem Header="Data" Name="tabClean" >
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap">
-                        The only data that this application stores on this device is the encrypted "Master Key", which is used as a starting point to generate passwords (also known as "salt"). <LineBreak/><LineBreak/>This key is encrypted, and under normal circumstances it can only be decrypted by this device.<LineBreak/><LineBreak/>The button below allows you to delete the stored master key from this device, causing a new random key to be generated in it's place.<LineBreak/><LineBreak/>Deleting the key file means that the results of passwords you have previously generated will be different, but also ensures that your master key cannot be copied from this device.<LineBreak/>
+                        The button below allows you to erase the master key from this device.
+                        <LineBreak/><LineBreak/>The master key is stored in an encrypted file, which under normal circumstances can only be accessed from this device.
+                        <LineBreak/><LineBreak/>If you are giving this device to another person, you may want to erase this file to ensure that they can't generate your passwords.
+                        <LineBreak/><LineBreak/><Bold>There is no way to recover this file once deleted</Bold>. 
+                        <LineBreak/>
                     </TextBlock>
                     <Button Name="btnEraseKey" Content="Erase Master Key" Click="btnEraseKey_Click"/>
                 </StackPanel>
