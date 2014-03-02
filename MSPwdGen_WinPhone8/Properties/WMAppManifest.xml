@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{6887cf6a-97e5-4454-956b-0d9cd16f3b8d}" Title="Mark's Password Generator" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="MSPwdGen_WinPhone8 author" Description="Allows the user to generate complex passwords, using a simple word or phrase as a reference. This app will not store any passwords, keeping it as lightweight and secure as possible. " Publisher="MSPwdGen_WinPhone8" PublisherID="{1df038f7-6851-4344-a873-cf1749cd37bd}">
-    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
+  <App xmlns="" ProductID="{6887cf6a-97e5-4454-956b-0d9cd16f3b8d}" Title="Mark's Password Generator" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Mark Strendin" Description="Allows the user to generate complex passwords, using a simple word or phrase as a reference. This app will not store any passwords, keeping it as lightweight and secure as possible. " Publisher="Mark Strendin" PublisherID="{1df038f7-6851-4344-a873-cf1749cd37bd}">
+    <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
     </Capabilities>
     <Tasks>
@@ -10,21 +10,25 @@
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="MSPwdGen_WinPhone8Token" TaskName="_default">
-        <TemplateFlip>
-          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
+        <TemplateIconic>
+          <SmallImageURI IsRelative="true" IsResource="false">IconicTileSmall.png</SmallImageURI>
           <Count>0</Count>
-          <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>MSPwdGen_WinPhone8</Title>
-          <BackContent>
-          </BackContent>
-          <BackBackgroundImageURI>
-          </BackBackgroundImageURI>
-          <BackTitle>
-          </BackTitle>
-          <DeviceLockImageURI>
-          </DeviceLockImageURI>
+          <IconImageURI IsRelative="true" IsResource="false">IconicTileMediumLarge.png</IconImageURI>
+          <Title>Password Generator</Title>
+          <Message>
+          </Message>
+          <BackgroundColor>
+          </BackgroundColor>
           <HasLarge>False</HasLarge>
-        </TemplateFlip>
+          <LargeContent1>
+          </LargeContent1>
+          <LargeContent2>
+          </LargeContent2>
+          <LargeContent3>
+          </LargeContent3>
+          <DeviceLockImageURI IsRelative="true" IsResource="false">
+          </DeviceLockImageURI>
+        </TemplateIconic>
       </PrimaryToken>
     </Tokens>
     <ScreenResolutions>

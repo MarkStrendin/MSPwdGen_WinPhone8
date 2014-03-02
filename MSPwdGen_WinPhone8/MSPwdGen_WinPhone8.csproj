@@ -123,6 +123,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ApplicationIcon.png" />
     <Content Include="Assets\AlignmentGrid.png" />
     <Content Include="Assets\ApplicationIcon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -142,6 +143,8 @@
     <Content Include="Assets\Tiles\IconicTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="IconicTileMediumLarge.png" />
+    <Content Include="IconicTileSmall.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">
