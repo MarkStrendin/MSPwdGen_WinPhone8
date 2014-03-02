@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{6887cf6a-97e5-4454-956b-0d9cd16f3b8d}" Title="Mark's Password Generator" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Mark Strendin" Description="Allows the user to generate complex passwords, using a simple word or phrase as a reference. This app will not store any passwords, keeping it as lightweight and secure as possible. " Publisher="Mark Strendin" PublisherID="{1df038f7-6851-4344-a873-cf1749cd37bd}">
+  <App xmlns="" ProductID="{6887cf6a-97e5-4454-956b-0d9cd16f3b8d}" Title="Mark's Password Generator" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="Mark Strendin" Description="Generates complex passwords from short words or phrases that are easier to remember. Each person's passwords are unique, so only you can re-create the same impossible to guess passwords over and over again, whenever you need them." Publisher="Mark Strendin" PublisherID="{1df038f7-6851-4344-a873-cf1749cd37bd}">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
     </Capabilities>

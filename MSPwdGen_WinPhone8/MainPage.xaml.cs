@@ -25,6 +25,9 @@ namespace MSPwdGen_WinPhone8
 
                 // We don't need to delete a key that doesn't exist, so hide the tab
                 pvtPages.Items.Remove(tabClean);
+                pvtPages.Items.Remove(tabAlpha);
+                pvtPages.Items.Remove(tabSpecial);
+
             }
             else
             {
@@ -84,16 +87,25 @@ namespace MSPwdGen_WinPhone8
         {
             string newKeyText = txtNewMasterKey.Text.Trim();
 
-            if (string.IsNullOrEmpty(newKeyText))
+            if ((string.IsNullOrEmpty(newKeyText)) || (newKeyText.Length < 3))
             {
-                newKeyText = MSPWDCrypto.CreateRandomString();
+                MessageBox.Show("ERROR: Master key not long enough. Key must be longer than 3 characters");
             }
+            else
+            {
+                MSPWDStorage.SetMasterKey(MSPWDCrypto.CreateMasterKey(txtNewMasterKey.Text.Trim()));
+                txtNewMasterKey.Text = string.Empty;
 
-            MSPWDStorage.SetMasterKey(MSPWDCrypto.CreateMasterKey(txtNewMasterKey.Text.Trim()));
-            txtNewMasterKey.Text = string.Empty;
+                // Add the "delete master key" page back
+                if (!pvtPages.Items.Contains(tabSpecial))
+                    pvtPages.Items.Add(tabSpecial);
+                if (!pvtPages.Items.Contains(tabAlpha))
+                    pvtPages.Items.Add(tabAlpha);
+                if (!pvtPages.Items.Contains(tabClean))
+                    pvtPages.Items.Add(tabClean);
 
-            // Add the "delete master key" page back
-            pvtPages.Items.Add(tabClean);
+                pvtPages.SelectedItem = tabSpecial;
+            }
         }
 
         #endregion
@@ -103,6 +115,10 @@ namespace MSPwdGen_WinPhone8
         private void btnEraseKey_Click(object sender, RoutedEventArgs e)
         {
             MSPWDStorage.DeleteMasterKey();
+            pvtPages.SelectedItem = tabKey;
+            pvtPages.Items.Remove(tabSpecial);
+            pvtPages.Items.Remove(tabAlpha);
+            pvtPages.Items.Remove(tabClean);
         }
 
         #endregion 
