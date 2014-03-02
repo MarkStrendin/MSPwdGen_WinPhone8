@@ -57,16 +57,23 @@
             
             <phone:PivotItem Header="Data" Name="tabClean" >
                 <StackPanel>
-                    <TextBlock TextWrapping="Wrap">
+                    <TextBlock TextWrapping="Wrap" Name="txtCleanDescription">
                         The master key is stored in an encrypted file, which can only be accessed from this device.
                         <LineBreak/><LineBreak/>The button below allows you to erase the master key from this device.
                         <LineBreak/><LineBreak/>If you are giving this device to another person, you may want to erase this file to ensure that they can't generate your passwords.
                         <LineBreak/><LineBreak/><Bold>There is no way to recover this file once deleted</Bold>.
                         <LineBreak/>
                     </TextBlock>
-                    <Button Name="btnEraseKey" Content="Erase Master Key" Click="btnEraseKey_Click"/>
+                    <Button Name="btnEraseKeyPrompt" Content="Erase Master Key" Click="btnEraseKeyPrompt_Click"/>
+                    <TextBlock TextWrapping="Wrap" Name="txtCleanSure" Visibility="Collapsed">Are you sure you want to erase the master key?
+                        <LineBreak/><LineBreak/>It is not possible to recover the key once deleted.
+                        <LineBreak/>
+                    </TextBlock>
+                    <Button Visibility="Collapsed" Name="btnEraseKey" Content="Yes, erase the master key" Click="btnEraseKey_Click"/>
+                    <Button Visibility="Collapsed" Name="btnDoNotErase" Content="No, do not erase" Click="btnDoNotErase_Click"/>
                 </StackPanel>
             </phone:PivotItem>
+            
         </phone:Pivot>
         
     </Grid>

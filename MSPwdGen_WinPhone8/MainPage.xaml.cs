@@ -119,6 +119,34 @@ namespace MSPwdGen_WinPhone8
             pvtPages.Items.Remove(tabSpecial);
             pvtPages.Items.Remove(tabAlpha);
             pvtPages.Items.Remove(tabClean);
+
+            txtCleanDescription.Visibility = System.Windows.Visibility.Visible;
+            btnEraseKeyPrompt.Visibility = System.Windows.Visibility.Visible;
+
+            txtCleanSure.Visibility = System.Windows.Visibility.Collapsed;
+            btnEraseKey.Visibility = System.Windows.Visibility.Collapsed;
+            btnDoNotErase.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void btnEraseKeyPrompt_Click(object sender, RoutedEventArgs e)
+        {
+            txtCleanDescription.Visibility = System.Windows.Visibility.Collapsed;
+            btnEraseKeyPrompt.Visibility = System.Windows.Visibility.Collapsed;
+
+            txtCleanSure.Visibility = System.Windows.Visibility.Visible;
+            btnEraseKey.Visibility = System.Windows.Visibility.Visible;
+            btnDoNotErase.Visibility = System.Windows.Visibility.Visible;
+
+        }
+
+        private void btnDoNotErase_Click(object sender, RoutedEventArgs e)
+        {
+            txtCleanDescription.Visibility = System.Windows.Visibility.Visible;
+            btnEraseKeyPrompt.Visibility = System.Windows.Visibility.Visible;
+
+            txtCleanSure.Visibility = System.Windows.Visibility.Collapsed;
+            btnEraseKey.Visibility = System.Windows.Visibility.Collapsed;
+            btnDoNotErase.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         #endregion 
@@ -184,6 +212,9 @@ namespace MSPwdGen_WinPhone8
         }
 
         #endregion
+
+
+       
 
     }
 }
