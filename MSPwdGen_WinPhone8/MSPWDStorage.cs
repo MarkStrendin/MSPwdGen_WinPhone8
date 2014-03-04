@@ -10,9 +10,16 @@ namespace MSPwdGen_WinPhone8
 {
     public class MSPWDStorage
     {
-        const string KeyFileName = "MarkPasswordGen.blob";
+        /// <summary>
+        /// The file name to use for the master key file in isolated storage.
+        /// </summary>
+        const string KeyFileName = "MSPWDKey.blob";
 
-        public static void SetMasterKey(byte[] input)
+        /// <summary>
+        /// Sets the master key file to the specified value.
+        /// </summary>
+        /// <param name="input"></param>
+        public static void SetMasterKeyFile(byte[] input)
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -23,6 +30,9 @@ namespace MSPwdGen_WinPhone8
             }
         }
        
+        /// <summary>
+        /// Deletes the master key file from storage
+        /// </summary>
         public static void DeleteMasterKey()
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
@@ -34,6 +44,10 @@ namespace MSPwdGen_WinPhone8
             }
         }
 
+        /// <summary>
+        /// Returns true if the master key file exists already. This is used to indicate if the app has ever been run before.
+        /// </summary>
+        /// <returns></returns>
         public static bool MasterKeyFileExists()
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
@@ -70,7 +84,7 @@ namespace MSPwdGen_WinPhone8
                     // Generate new master key, and save it to a file
                     // The method we generate this does not have to match other platforms, it just has to be random
                     MasterKey = MSPWDCrypto.CreateMasterKey(MSPWDCrypto.CreateRandomString());
-                    SetMasterKey(MasterKey);
+                    SetMasterKeyFile(MasterKey);
                 }
             }
             

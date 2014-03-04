@@ -26,6 +26,7 @@
                     <Button Name="btnGenerate_Special_12" Content="Copy 12 characters"  IsEnabled="False" Click="btnGenerate_Special_12_Click"/>
                     <Button Name="btnGenerate_Special_15" Content="Copy 15 characters"  IsEnabled="False" Click="btnGenerate_Special_15_Click"/>
                     <Button Name="btnGenerate_Special_20" Content="Copy 20 characters"  IsEnabled="False" Click="btnGenerate_Special_20_Click"/>
+                    <Button Name="btnGenerate_Special_32" Content="Copy 32 characters"  IsEnabled="False" Click="btnGenerate_Special_32_Click"/>
                 </StackPanel>                
             </phone:PivotItem>
 
@@ -38,6 +39,7 @@
                     <Button Name="btnGenerate_Alpha_12" Content="Copy 12 characters" IsEnabled="False" Click="btnGenerate_Alpha_12_Click"/>
                     <Button Name="btnGenerate_Alpha_15" Content="Copy 15 characters" IsEnabled="False" Click="btnGenerate_Alpha_15_Click"/>
                     <Button Name="btnGenerate_Alpha_20" Content="Copy 20 characters" IsEnabled="False" Click="btnGenerate_Alpha_20_Click"/>
+                    <Button Name="btnGenerate_Alpha_32" Content="Copy 32 characters" IsEnabled="False" Click="btnGenerate_Alpha_32_Click"/>
                 </StackPanel>
             </phone:PivotItem>
             

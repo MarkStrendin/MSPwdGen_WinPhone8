@@ -61,6 +61,7 @@ namespace MSPwdGen_WinPhone8
             btnGenerate_Special_12.IsEnabled = true;
             btnGenerate_Special_15.IsEnabled = true;
             btnGenerate_Special_20.IsEnabled = true;
+            btnGenerate_Special_32.IsEnabled = true;
         }
 
         private void EnableClipboardButtons_Alpha()
@@ -69,6 +70,7 @@ namespace MSPwdGen_WinPhone8
             btnGenerate_Alpha_12.IsEnabled = true;
             btnGenerate_Alpha_15.IsEnabled = true;
             btnGenerate_Alpha_20.IsEnabled = true;
+            btnGenerate_Alpha_32.IsEnabled = true;
         }
 
         private void ClearAllTextFields()
@@ -93,7 +95,7 @@ namespace MSPwdGen_WinPhone8
             }
             else
             {
-                MSPWDStorage.SetMasterKey(MSPWDCrypto.CreateMasterKey(txtNewMasterKey.Text.Trim()));
+                MSPWDStorage.SetMasterKeyFile(MSPWDCrypto.CreateMasterKey(txtNewMasterKey.Text.Trim()));
                 txtNewMasterKey.Text = string.Empty;
 
                 // Add the "delete master key" page back
@@ -180,6 +182,11 @@ namespace MSPwdGen_WinPhone8
             Clipboard.SetText(txtOutput_Special.Text.Substring(0, 20));
         }
 
+        private void btnGenerate_Special_32_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(txtOutput_Special.Text.Substring(0, 32));
+        }
+
         #endregion
 
         #region Alpha only tab event handlers
@@ -211,10 +218,12 @@ namespace MSPwdGen_WinPhone8
             Clipboard.SetText(txtOutput_Alpha.Text.Substring(0, 20));
         }
 
-        #endregion
+        private void btnGenerate_Alpha_32_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(txtOutput_Alpha.Text.Substring(0, 32));
+        }
 
-
-       
-
+        #endregion 
+        
     }
 }
